@@ -4,7 +4,6 @@ using Worker;
 using Worker.Configuration;
 using DomainService.Shared.Entity;
 using MonitoringWorker.Consumers;
-using SeliseBlocks.ConfigurationDriver;
 using DomainService.Shared.Utilities;
 
 const string serviceName = "blocks-monitor-worker";
@@ -19,12 +18,12 @@ IHostBuilder CreateHostBuilder(string[] args) =>
         .ConfigureAppConfiguration((context, builder) =>
         {
             // ApplicationConfigurations.ConfigureWorkerEnv(builder, args);
-            builder.AddMongoDbConfiguration(options =>
+            // Genesis loader (I07-WP3): KeyValueStores first, then the legacy Secrets document.
+            builder.AddKeyValueConfiguration(options =>
             {
                 options.ConnectionString = secret.DatabaseConnectionString;
                 options.DatabaseName = secret.RootDatabaseName;
-                options.CollectionName = "Secrets";
-                options.SecretKey = "blocks-secret-monitor";
+                options.Key = "blocks-secret-monitor";
             });
         })
         .ConfigureServices((services) =>

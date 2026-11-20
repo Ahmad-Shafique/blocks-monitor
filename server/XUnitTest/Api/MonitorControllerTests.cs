@@ -364,7 +364,7 @@ namespace XUnitTest.Api
             var programPath = LocateProgramCs();
             var program = StripCommentsOnly(File.ReadAllText(programPath));
 
-            const string monitorSecret = "options.SecretKey = \"blocks-secret-monitor\"";
+            const string monitorSecret = "options.Key = \"blocks-secret-monitor\"";
             var firstMonitorIndex = program.IndexOf(monitorSecret, StringComparison.Ordinal);
 
             firstMonitorIndex.Should().BeGreaterThan(-1);
@@ -664,7 +664,7 @@ namespace XUnitTest.Api
             var propsPath = LocateDirectoryPackagesProps();
             var props = File.ReadAllText(propsPath);
             props.Should().Contain("Include=\"SeliseBlocks.ReleaseDriver.OS\" Version=\"4.0.3\"");
-            props.Should().Contain("Include=\"SeliseBlocks.Genesis.OS\" Version=\"4.5.7\"");
+            props.Should().Contain("Include=\"SeliseBlocks.Genesis.OS\" Version=\"4.6.1\"");
         }
 
         private static string LocateDirectoryPackagesProps()

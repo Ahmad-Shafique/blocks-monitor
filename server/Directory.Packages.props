@@ -23,7 +23,8 @@
 
       4.0.8 added delegated access, which registers a startup validator that fails the host unless
       BLOCKS_IAM_BASE_URL or BLOCKS_IAM_TOKEN_ENDPOINT resolves. Both processes get it from the
-      Secrets KeyPairs document via SeliseBlocks.ConfigurationDriver (key
+      Secrets KeyPairs document via Genesis AddKeyValueConfiguration (KeyValueStores first, legacy
+      Secrets fallback; Genesis 4.6.1 is the first release that has it; I07-WP3 spike) (key
       'FrontendRuntime:BLOCKS_IAM_BASE_URL', provisioned by blocks-infra/configure.sh), so no
       environment variable is needed - but an environment provisioned before that infra change must
       be re-provisioned or the host will not start.
@@ -34,7 +35,7 @@
       is seeded, and 4xx is never reported by design. Note that ConfigureWorker gets no
       IConfiguration, so Worker is NOT covered - its faults reach the LMT pipeline only.
     -->
-    <PackageVersion Include="SeliseBlocks.Genesis.OS" Version="4.5.7" />
+    <PackageVersion Include="SeliseBlocks.Genesis.OS" Version="4.6.1" />
     <PackageVersion Include="SeliseBlocks.ReleaseDriver.OS" Version="4.0.3" />
     <!--
       ReleaseDriver.OS 4.0.3 ships Devops.DomainService with an assembly ref to
@@ -51,7 +52,6 @@
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
-    <PackageVersion Include="SeliseBlocks.ConfigurationDriver" Version="10.0.0-preview.1" />
     <!-- Transitive pin: MimeKit (via MailKit) pulls Pkcs 10.0.0 (GHSA-846f-f764-76mx, GHSA-2fmv-rv2c-59x7). -->
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
