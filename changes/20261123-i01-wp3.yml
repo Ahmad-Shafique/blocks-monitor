@@ -1,0 +1,3 @@
+type: changed
+breaking: false
+summary: "The API and worker image labels now name the Monitor service instead of IAM."
