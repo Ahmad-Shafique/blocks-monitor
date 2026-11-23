@@ -664,7 +664,7 @@ namespace XUnitTest.Api
             var propsPath = LocateDirectoryPackagesProps();
             var props = File.ReadAllText(propsPath);
             props.Should().Contain("Include=\"SeliseBlocks.ReleaseDriver.OS\" Version=\"4.0.3\"");
-            props.Should().Contain("Include=\"SeliseBlocks.Genesis.OS\" Version=\"4.6.1\"");
+            props.Should().Contain("Include=\"SeliseBlocks.Genesis.OS\" Version=\"4.7.0"); // 4.7.0 has the shared ResolveVaultType (I02-WP2); prefix match also accepts a local -ind.<n> build
         }
 
         private static string LocateDirectoryPackagesProps()
