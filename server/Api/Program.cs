@@ -2,23 +2,23 @@ using Blocks.Extensions.DependencyInjection;
 using Blocks.Genesis;
 using Blocks.Secrets;
 using Microsoft.AspNetCore.Http.Features;
+using SeliseBlocks.ConfigurationDriver;
 using DomainService.Shared.Utilities;
 
 var serviceName = "blocks-monitor-api";
-var vaultType = ApplicationConfigurations.ResolveVaultType();
+var vaultType = ResolveVaultType();
 var secret = await ApplicationConfigurations.ConfigureLogAndSecretsAsync(serviceName, vaultType);
 var builder = WebApplication.CreateBuilder(args);
 ApplicationConfigurations.ConfigureApiEnv(builder, args);
 
 
 
-// Genesis loader (I07-WP3): KeyValueStores { Key, Value } first, then the legacy
-// Secrets { SecretKey, KeyPairs } document, which is what SeliseBlocks.ConfigurationDriver read.
-builder.Configuration.AddKeyValueConfiguration(options =>
+builder.Configuration.AddMongoDbConfiguration(options =>
 {
     options.ConnectionString = secret.DatabaseConnectionString;
     options.DatabaseName = secret.RootDatabaseName;
-    options.Key = "blocks-secret-monitor";
+    options.CollectionName = "Secrets";
+    options.SecretKey = "blocks-secret-monitor";
 });
 
 ApplicationConfigurations.ConfigureServices(builder.Services, MonitorConstants.GetApiMessageConfiguration(secret.MessageConnectionString));
@@ -133,6 +133,22 @@ ApplicationConfigurations.ConfigureMiddleware(app);
 
 await app.RunAsync();
 
+static VaultType ResolveVaultType()
+{
+ var configuredVaultType = Environment.GetEnvironmentVariable("BLOCKS_VAULT_TYPE");
+ if (!string.IsNullOrWhiteSpace(configuredVaultType) &&
+     Enum.TryParse<VaultType>(configuredVaultType, true, out var parsedVaultType))
+ {
+  return parsedVaultType;
+ }
+
+ var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ??
+                   Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
+ return string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase)
+     ? VaultType.OnPrem
+     : VaultType.Azure;
+}
 
 static bool IsLocalDevHost(string host)
 {
