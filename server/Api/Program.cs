@@ -2,6 +2,7 @@ using Blocks.Extensions.DependencyInjection;
 using Blocks.Genesis;
 using Blocks.Secrets;
 using Microsoft.AspNetCore.Http.Features;
+using SeliseBlocks.ConfigurationDriver;
 using DomainService.Shared.Utilities;
 
 var serviceName = "blocks-monitor-api";
@@ -12,13 +13,12 @@ ApplicationConfigurations.ConfigureApiEnv(builder, args);
 
 
 
-// Genesis loader (I07-WP3): KeyValueStores { Key, Value } first, then the legacy
-// Secrets { SecretKey, KeyPairs } document, which is what SeliseBlocks.ConfigurationDriver read.
-builder.Configuration.AddKeyValueConfiguration(options =>
+builder.Configuration.AddMongoDbConfiguration(options =>
 {
     options.ConnectionString = secret.DatabaseConnectionString;
     options.DatabaseName = secret.RootDatabaseName;
-    options.Key = "blocks-secret-monitor";
+    options.CollectionName = "Secrets";
+    options.SecretKey = "blocks-secret-monitor";
 });
 
 ApplicationConfigurations.ConfigureServices(builder.Services, MonitorConstants.GetApiMessageConfiguration(secret.MessageConnectionString));

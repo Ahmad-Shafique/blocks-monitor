@@ -197,7 +197,7 @@ namespace XUnitTest.Api
         }
 
         // ---------------------------------------------------------------------------------
-        // #201 — GET /Monitor/repos-list, backed by IReleaseDriverService.
+        // #201 â€” GET /Monitor/repos-list, backed by IReleaseDriverService.
         // ---------------------------------------------------------------------------------
 
         private static readonly System.Reflection.MethodInfo ReposListAction =
@@ -364,7 +364,7 @@ namespace XUnitTest.Api
             var programPath = LocateProgramCs();
             var program = StripCommentsOnly(File.ReadAllText(programPath));
 
-            const string monitorSecret = "options.Key = \"blocks-secret-monitor\"";
+            const string monitorSecret = "options.SecretKey = \"blocks-secret-monitor\"";
             var firstMonitorIndex = program.IndexOf(monitorSecret, StringComparison.Ordinal);
 
             firstMonitorIndex.Should().BeGreaterThan(-1);
@@ -374,7 +374,7 @@ namespace XUnitTest.Api
         }
 
         // ---------------------------------------------------------------------------------
-        // #222 — GET /Monitor/repo-details and /Monitor/reports
+        // #222 â€” GET /Monitor/repo-details and /Monitor/reports
         // ---------------------------------------------------------------------------------
 
         private static readonly System.Reflection.MethodInfo RepoDetailsAction =

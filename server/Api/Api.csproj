@@ -20,6 +20,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="SeliseBlocks.ConfigurationDriver" />
     <PackageReference Include="SeliseBlocks.ReleaseDriver.OS" />
     <PackageReference Include="SeliseBlocks.Secrets.OS" />
   </ItemGroup>
