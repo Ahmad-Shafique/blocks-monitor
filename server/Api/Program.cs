@@ -6,7 +6,7 @@ using SeliseBlocks.ConfigurationDriver;
 using DomainService.Shared.Utilities;
 
 var serviceName = "blocks-monitor-api";
-var vaultType = ApplicationConfigurations.ResolveVaultType();
+var vaultType = ResolveVaultType();
 var secret = await ApplicationConfigurations.ConfigureLogAndSecretsAsync(serviceName, vaultType);
 var builder = WebApplication.CreateBuilder(args);
 ApplicationConfigurations.ConfigureApiEnv(builder, args);
@@ -133,6 +133,22 @@ ApplicationConfigurations.ConfigureMiddleware(app);
 
 await app.RunAsync();
 
+static VaultType ResolveVaultType()
+{
+ var configuredVaultType = Environment.GetEnvironmentVariable("BLOCKS_VAULT_TYPE");
+ if (!string.IsNullOrWhiteSpace(configuredVaultType) &&
+     Enum.TryParse<VaultType>(configuredVaultType, true, out var parsedVaultType))
+ {
+  return parsedVaultType;
+ }
+
+ var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ??
+                   Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
+ return string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase)
+     ? VaultType.OnPrem
+     : VaultType.Azure;
+}
 
 static bool IsLocalDevHost(string host)
 {
